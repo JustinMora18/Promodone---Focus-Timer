@@ -55,7 +55,6 @@ promodone/
 This website is not affiliated with or endorsed by the Pomodoro Technique® or the trademark holder, the Cirillo Company.  
 Pomodoro® and Pomodoro Technique® are registered trademarks of Francesco Cirillo.  
 All trademarks, logos, and brand names are the property of their respective owners and are used for identification purposes only.
-
 ---
 
 _Designed & coded by Justin Mora for learning and practice._ 🍅💻
