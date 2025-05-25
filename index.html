@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=play_arrow,pause,history,keyboard_arrow_up,keyboard_arrow_down" />
+    <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+
     <title>Promodone - Focus Timer</title>
 </head>
 <body>
-    <section>
+    <section class="main-section">
         <nav class="top-navigation">
-            <ul class="nav-list">
+            <ul>
                 <li>
-                    <a href="#" class="nav-item">TECHNIQUES</a>
+                    <a href="#" class="top-nav-item">TECHNIQUES</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-item active">TIMER</a>
+                    <a href="#" class="top-nav-item active">TIMER</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-item">LOGIN/SIGNUP</a>
+                    <a href="#" class="top-nav-item">LOGIN/SIGNUP</a>
                 </li>
             </ul>
         </nav>
@@ -30,36 +33,36 @@
             <div class="timer-nav">
                 <ul class="timer-nav-buttons">
                     <li>
-                        <a href="#" class="nav-item active">PROMODORO</a>
+                        <a href="#" class="timer-nav-item active">PROMODORO</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item">SHORT BREAK</a>
+                        <a href="#" class="timer-nav-item">SHORT BREAK</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item">LONG BREAK</a>
+                        <a href="#" class="timer-nav-item">LONG BREAK</a>
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="timer" id="regularTimer" data-duration="25.00">
-            <h2 class="time">25:00</h2>
-        </div>
-        <div class="timer" id="shortTimer" data-duration="5.00">
-            <h2 class="time">5:00</h2>
-        </div>
-        <div class="timer" id="longTimer" data-duration="15.00">
-            <h2 class="time">10:00</h2>
-        </div>
-        <div class="timer-controls">
-            <button class="control-btn">
-                <span class="material-symbols-outlined">play_arrow</span>
-            </button>
-            <button class="control-btn">
-                <span class="material-symbols-outlined">pause</span>
-            </button>
-            <button class="control-btn">
-                <span class="material-symbols-outlined">refresh</span>
-            </button>
+            <div class="timer" id="regularTimer" data-duration="25.00">
+                <h2 class="time">25:00</h2>
+            </div>
+            <div class="timer" id="shortTimer" data-duration="5.00">
+                <h2 class="time">5:00</h2>
+            </div>
+            <div class="timer" id="longTimer" data-duration="15.00">
+                <h2 class="time">10:00</h2>
+            </div>
+            <div class="timer-controls">
+                <button class="control-btn">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                </button>
+                <button class="control-btn">
+                    <span class="material-symbols-outlined">pause</span>
+                </button>
+                <button class="control-btn">
+                    <span class="material-symbols-outlined">update</span>
+                </button>
+            </div>
         </div>
         <div class="expansion-container">
             <div class="expansion-panel" id="expansionPanel">
