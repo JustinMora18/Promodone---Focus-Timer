@@ -49,7 +49,7 @@
             <div class="timer" id="shortTimer" data-duration="5.00">
                 <h2 class="time">5:00</h2>
             </div>
-            <div class="timer" id="longTimer" data-duration="15.00">
+            <div class="timer" id="longTimer" data-duration="10.00">
                 <h2 class="time">10:00</h2>
             </div>
             <div class="timer-controls">
@@ -64,8 +64,11 @@
                 </button>
             </div>
         </div>
-        <div class="expansion-container">
-            <div class="expansion-panel" id="expansionPanel">
+        <div class="expanded-container" id="expandedContainer">
+            <div class="expandable-panel" id="expandablePanel">
+                <button class="expandable-btn" id="expandableBtn">
+                    <span class="material-symbols-outlined">expand_less</span>
+                </button>
                 <div class="panel-content">
                     <div class="color-section">
                         <h3>CHOOSE YOUR BACKGROUND COLOR</h3>
@@ -82,16 +85,13 @@
                         <div class="time-input">
                             <label for="minutes">Minutes</label>
                             <input type="number" id="minutes" min="0" max="60" value="25">
-
+                            
                             <label for="seconds">Seconds</label>
                             <input type="number" id="seconds" min="0" max="59" value="0">
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="expand-btn" id="expandBtn">
-                <span class="material-symbols-outlined">expand_less</span>
-            </button>
         </div>
     </section>
     <footer>
