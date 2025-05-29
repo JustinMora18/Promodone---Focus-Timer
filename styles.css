@@ -386,15 +386,3 @@ footer p{
     margin: 1rem 0;
     line-height: 1;
 }
-
-/* #regularTimer{
-    display: none;
-} */
-
-#shortTimer{
-    display: none;
-}
-
-#longTimer{
-    display: none;
-}

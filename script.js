@@ -68,3 +68,153 @@ function initZIndexManager() {
     updateZIndex();
 }
 document.addEventListener('DOMContentLoaded', initZIndexManager);
+
+let promodoro = document.getElementById('regularTimer');
+let short = document.getElementById('shortTimer');
+let long = document.getElementById('longTimer');
+let timers = document.querySelectorAll('.timer');
+let session = document.getElementById('promodoro-session');
+let shortBreak = document.getElementById('short-break');
+let longBreak = document.getElementById('long-break');
+let startBtn = document.getElementById('start');
+let pauseBtn = document.getElementById('pause');
+let resetBtn = document.getElementById('reset');
+let button = document.querySelector('.control-btn');
+
+let currentTimer = null;
+let myInterval = null;
+let isPaused = false;
+let remainingTime = 0;
+
+function showDefaultTimer(){
+    promodoro.style.display = 'block';
+    short.style.display = 'none';
+    long.style.display = 'none';
+    currentTimer = promodoro;
+}
+showDefaultTimer();
+
+function hideAll() {
+    timers.forEach(timer => {
+        timer.style.display = 'none';
+    });
+}  
+
+session.addEventListener('click', () => {
+    hideAll();
+    promodoro.style.display = 'block';
+    session.classList.add('active');
+    shortBreak.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = promodoro;
+    resetTimer();
+})
+
+shortBreak.addEventListener('click', () => {
+    hideAll();
+
+    short.style.display = 'block';
+    shortBreak.classList.add('active');
+    session.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = short;
+    resetTimer();
+})
+
+longBreak.addEventListener('click', () => {
+    hideAll();
+
+    long.style.display = 'block';
+
+    longBreak.classList.add('active');
+    session.classList.remove('active');
+    shortBreak.classList.remove('active');
+    currentTimer = long;
+    resetTimer();
+})
+
+function startTimer(timeDisplay){
+    if (myInterval) clearInterval(myInterval);
+
+    const container = timeDisplay.parentElement;
+    let timerDuration;
+
+    if (isPaused && remainingTime > 0) {
+        timerDuration = Math.ceil(remainingTime / 60000);
+    } else {
+        const durationStr = container.getAttribute('data-duration');
+        timerDuration = parseFloat(durationStr);
+    }
+
+    const durationInMilSec = timerDuration * 60 * 1000;
+    let endTimestamp = Date.now() + durationInMilSec;
+
+    myInterval = setInterval(() =>{
+        const timeRemnng = endTimestamp - Date.now();
+
+        if (timeRemnng <= 0){
+            clearInterval(myInterval);
+            timeDisplay.textContent = '00:00';
+
+            try{
+                new Audio('assets/alarmSound.wav').play();
+            } catch (error){
+                console.log('No se pudo reproducir el audio:', error);
+            }
+            isPaused = false;
+            remainingTime = 0;
+            return;
+        }
+
+        const mins = Math.floor(timeRemnng / 60000);
+        const secs = Math.floor((timeRemnng % 60000) / 1000);
+
+        timeDisplay.textContent = 
+            `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        
+        remainingTime = timeRemnng;
+    }, 1000);
+}
+
+function pauseTimer(){
+    if (myInterval){
+        clearInterval(myInterval);
+        myInterval = null;
+        isPaused = true;
+    }
+}
+
+function resetTimer() {
+    if (myInterval) {
+        clearInterval(myInterval);
+        myInterval = null;
+    }
+    isPaused = false;
+    remainingTime = 0;
+    
+    if (currentTimer) {
+        const container = currentTimer;
+        const durationStr = container.getAttribute('data-duration');
+        const duration = parseFloat(durationStr);
+        const display = currentTimer.querySelector('.time');
+        
+        const mins = Math.floor(duration);
+        const secs = Math.floor((duration % 1) * 60);
+        display.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    }
+}
+
+startBtn.addEventListener('click', () => {
+    if (!currentTimer) return;
+    const display = currentTimer.querySelector('.time');
+    startTimer(display);
+    isPaused = false;
+});
+
+pauseBtn.addEventListener('click', () => {
+    pauseTimer();
+});
+
+resetBtn.addEventListener('click', () => {
+    resetTimer();
+});
