@@ -8,17 +8,10 @@ const icon = btn.querySelector('.material-symbols-outlined');
 
 function togglePanel() {
     isExpanded = !isExpanded;
-    
-    if (isExpanded) {
-        icon.textContent = 'expand_more';
-        expandablePanel.classList.add('expanded');
-        expandableBtn.classList.remove
-        ('collapsed');
-    } else {
-        icon.textContent = 'expand_less';
-        expandablePanel.classList.remove('expanded');
-        expandableBtn.classList.add('collapsed');
-    }
+
+    icon.textContent = isExpanded ? 'expand_more' : 'expand_less';
+    expandablePanel.classList.toggle('expanded', isExpanded);
+    expandableBtn.classList.toggle('collapsed', !isExpanded);
 }
 
 expandableBtn.addEventListener('click', togglePanel);
@@ -67,7 +60,6 @@ function initZIndexManager() {
     }
     updateZIndex();
 }
-document.addEventListener('DOMContentLoaded', initZIndexManager);
 
 let promodoro = document.getElementById('regularTimer');
 let short = document.getElementById('shortTimer');
@@ -86,6 +78,9 @@ let myInterval = null;
 let isPaused = false;
 let remainingTime = 0;
 
+const alarmSound = new Audio('assets/alarmSound.wav');
+alarmSound.preload = 'auto';
+
 function showDefaultTimer(){
     promodoro.style.display = 'block';
     short.style.display = 'none';
@@ -99,39 +94,6 @@ function hideAll() {
         timer.style.display = 'none';
     });
 }  
-
-session.addEventListener('click', () => {
-    hideAll();
-    promodoro.style.display = 'block';
-    session.classList.add('active');
-    shortBreak.classList.remove('active');
-    longBreak.classList.remove('active');
-    currentTimer = promodoro;
-    resetTimer();
-})
-
-shortBreak.addEventListener('click', () => {
-    hideAll();
-
-    short.style.display = 'block';
-    shortBreak.classList.add('active');
-    session.classList.remove('active');
-    longBreak.classList.remove('active');
-    currentTimer = short;
-    resetTimer();
-})
-
-longBreak.addEventListener('click', () => {
-    hideAll();
-
-    long.style.display = 'block';
-
-    longBreak.classList.add('active');
-    session.classList.remove('active');
-    shortBreak.classList.remove('active');
-    currentTimer = long;
-    resetTimer();
-})
 
 function startTimer(timeDisplay){
     if (myInterval) clearInterval(myInterval);
@@ -154,15 +116,14 @@ function startTimer(timeDisplay){
 
         if (timeRemnng <= 0){
             clearInterval(myInterval);
-            timeDisplay.textContent = '00:00';
+            currentTimer.style.display = 'none';
 
-            try{
-                new Audio('assets/alarmSound.wav').play();
-            } catch (error){
-                console.log('No se pudo reproducir el audio:', error);
-            }
+            alarmSound.currentTime = 0;
+            alarmSound.play().catch(err => console.warn('Alarma:', err));
+
             isPaused = false;
             remainingTime = 0;
+
             return;
         }
 
@@ -209,12 +170,140 @@ startBtn.addEventListener('click', () => {
     const display = currentTimer.querySelector('.time');
     startTimer(display);
     isPaused = false;
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 });
 
 pauseBtn.addEventListener('click', () => {
     pauseTimer();
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 });
 
 resetBtn.addEventListener('click', () => {
     resetTimer();
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 });
+
+let minutesInput = document.querySelector('.inpt1');
+let secondsInput = document.querySelector('.inpt2');
+
+function initTimeInputs() {
+    minutesInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 2) this.value = this.value.slice(0, 2);
+        if (parseInt(this.value) > 99) this.value = '99';
+        updateTimerFromInputs();
+    });
+    
+    secondsInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 2) {
+        this.value = this.value.slice(0, 2);
+        }
+        if (parseInt(this.value) > 59) {
+        this.value = '59';
+        }
+        updateTimerFromInputs();
+    });
+
+    minutesInput.addEventListener('blur', function() {
+        if (this.value === '' || this.value === '0') {
+            this.value = '01';
+        }
+        if (this.value.length === 1) {
+            this.value = '0' + this.value;
+        } 
+        updateTimerFromInputs();
+    });
+
+    secondsInput.addEventListener('blur', function () {
+        if (this.value === '') {
+            this.value = '00';
+        }
+        if (this.value.length === 1) {
+            this.value = '0' + this.value;
+        }
+        updateTimerFromInputs();
+    });
+}
+
+function updateTimerFromInputs() {
+    if (!currentTimer) return;
+
+    const minutes = parseInt(minutesInput.value) || 0;
+    const seconds = parseInt(secondsInput.value) || 0;
+    const totalMinutes = minutes + (seconds / 60);
+
+    currentTimer.setAttribute('data-duration', totalMinutes.toFixed(2));
+
+    if (!myInterval) {
+        const display = currentTimer.querySelector('.time');
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        const formattedSeconds = seconds.toString().padStart(2, '0');
+        display.textContent = `${formattedMinutes}:${formattedSeconds}`;
+    }
+}
+
+function loadCurrentTimerValues() {
+    if (!currentTimer) return;
+
+    const durationStr = currentTimer.getAttribute('data-duration');
+    const duration = parseFloat(durationStr);
+
+    const minutes = Math.floor(duration);
+    const seconds = Math.floor((duration % 1) * 60);
+
+    minutesInput.value = minutes.toString().padStart(2, '0');
+    secondsInput.value = seconds.toString().padStart(2, '0');
+}
+
+session.addEventListener('click', () => {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+
+    hideAll();
+    promodoro.style.display = 'block';
+    session.classList.add('active');
+    shortBreak.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = promodoro;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
+shortBreak.addEventListener('click', () => {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    
+    hideAll();
+    short.style.display = 'block';
+    shortBreak.classList.add('active');
+    session.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = short;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
+longBreak.addEventListener('click', () => {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+
+    hideAll();
+    long.style.display = 'block';
+    longBreak.classList.add('active');
+    session.classList.remove('active');
+    shortBreak.classList.remove('active');
+    currentTimer = long;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
+document.addEventListener('DOMContentLoaded', function() {
+    initZIndexManager();
+    initTimeInputs(); 
+    loadCurrentTimerValues();
+});
+

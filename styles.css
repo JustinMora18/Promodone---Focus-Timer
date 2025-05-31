@@ -386,3 +386,18 @@ footer p{
     margin: 1rem 0;
     line-height: 1;
 }
+
+.break-message{
+    display:none; 
+    text-align:center; 
+    color:var(--text-color); 
+    font-family: var(--frst-font);
+    font-size: 7.5rem;
+    margin:4rem 0;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.break-message.show{
+    opacity: 1;
+}
