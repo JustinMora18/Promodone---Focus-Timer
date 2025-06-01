@@ -71,7 +71,6 @@ let longBreak = document.getElementById('long-break');
 let startBtn = document.getElementById('start');
 let pauseBtn = document.getElementById('pause');
 let resetBtn = document.getElementById('reset');
-let button = document.querySelector('.control-btn');
 
 let currentTimer = null;
 let myInterval = null;
@@ -80,6 +79,11 @@ let remainingTime = 0;
 
 const alarmSound = new Audio('assets/alarmSound.wav');
 alarmSound.preload = 'auto';
+
+const notifPromo = document.getElementById('notif-promoToBreak');  
+const notifBreak = document.getElementById('notif-breakToPromo');
+const linkPromo  = document.getElementById('link-promoToBreak');
+const linkBreak  = document.getElementById('link-breakToPromo'); 
 
 function showDefaultTimer(){
     promodoro.style.display = 'block';
@@ -103,7 +107,8 @@ function startTimer(timeDisplay){
 
     if (isPaused && remainingTime > 0) {
         timerDuration = Math.ceil(remainingTime / 60000);
-    } else {
+    } 
+    else {
         const durationStr = container.getAttribute('data-duration');
         timerDuration = parseFloat(durationStr);
     }
@@ -116,7 +121,17 @@ function startTimer(timeDisplay){
 
         if (timeRemnng <= 0){
             clearInterval(myInterval);
-            currentTimer.style.display = 'none';
+            const display = currentTimer.querySelector('.time');
+            display.textContent = '00:00';
+            
+            if (currentTimer.id === 'regularTimer') {
+                notifPromo.classList.remove('hidden');
+                notifPromo.classList.add('visible');
+            } 
+            else {
+                notifBreak.classList.remove('hidden');
+                notifBreak.classList.add('visible');
+            }
 
             alarmSound.currentTime = 0;
             alarmSound.play().catch(err => console.warn('Alarma:', err));
@@ -186,6 +201,81 @@ resetBtn.addEventListener('click', () => {
     alarmSound.currentTime = 0;
 });
 
+linkPromo.addEventListener('click', e => {
+    e.preventDefault();
+    notifPromo.classList.remove('visible');
+    notifPromo.classList.add('hidden');
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    shortBreak.click();
+});
+
+linkBreak.addEventListener('click', e => {
+    e.preventDefault();
+    notifBreak.classList.remove('visible');
+    notifBreak.classList.add('hidden');
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    session.click();
+});
+
+session.addEventListener('click', () => {
+    notifPromo.classList.remove('visible');
+    notifPromo.classList.add('hidden');
+    notifBreak.classList.remove('visible');
+    notifBreak.classList.add('hidden');
+
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+
+    hideAll();
+    promodoro.style.display = 'block';
+    session.classList.add('active');
+    shortBreak.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = promodoro;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
+shortBreak.addEventListener('click', () => {
+    notifPromo.classList.remove('visible');
+    notifPromo.classList.add('hidden');
+    notifBreak.classList.remove('visible');
+    notifBreak.classList.add('hidden');
+
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    
+    hideAll();
+    short.style.display = 'block';
+    shortBreak.classList.add('active');
+    session.classList.remove('active');
+    longBreak.classList.remove('active');
+    currentTimer = short;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
+longBreak.addEventListener('click', () => {
+    notifPromo.classList.remove('visible');
+    notifPromo.classList.add('hidden');
+    notifBreak.classList.remove('visible');
+    notifBreak.classList.add('hidden');
+
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+
+    hideAll();
+    long.style.display = 'block';
+    longBreak.classList.add('active');
+    session.classList.remove('active');
+    shortBreak.classList.remove('active');
+    currentTimer = long;
+    resetTimer();
+    loadCurrentTimerValues();
+})
+
 let minutesInput = document.querySelector('.inpt1');
 let secondsInput = document.querySelector('.inpt2');
 
@@ -210,7 +300,7 @@ function initTimeInputs() {
 
     minutesInput.addEventListener('blur', function() {
         if (this.value === '' || this.value === '0') {
-            this.value = '01';
+            this.value = '00';
         }
         if (this.value.length === 1) {
             this.value = '0' + this.value;
@@ -259,51 +349,8 @@ function loadCurrentTimerValues() {
     secondsInput.value = seconds.toString().padStart(2, '0');
 }
 
-session.addEventListener('click', () => {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-
-    hideAll();
-    promodoro.style.display = 'block';
-    session.classList.add('active');
-    shortBreak.classList.remove('active');
-    longBreak.classList.remove('active');
-    currentTimer = promodoro;
-    resetTimer();
-    loadCurrentTimerValues();
-})
-
-shortBreak.addEventListener('click', () => {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    
-    hideAll();
-    short.style.display = 'block';
-    shortBreak.classList.add('active');
-    session.classList.remove('active');
-    longBreak.classList.remove('active');
-    currentTimer = short;
-    resetTimer();
-    loadCurrentTimerValues();
-})
-
-longBreak.addEventListener('click', () => {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-
-    hideAll();
-    long.style.display = 'block';
-    longBreak.classList.add('active');
-    session.classList.remove('active');
-    shortBreak.classList.remove('active');
-    currentTimer = long;
-    resetTimer();
-    loadCurrentTimerValues();
-})
-
 document.addEventListener('DOMContentLoaded', function() {
     initZIndexManager();
     initTimeInputs(); 
     loadCurrentTimerValues();
 });
-
