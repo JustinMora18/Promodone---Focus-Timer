@@ -77,9 +77,6 @@ let myInterval = null;
 let isPaused = false;
 let remainingTime = 0;
 
-const alarmSound = new Audio('assets/alarmSound.wav');
-alarmSound.preload = 'auto';
-
 const notifPromo = document.getElementById('notif-promoToBreak');  
 const notifBreak = document.getElementById('notif-breakToPromo');
 const linkPromo  = document.getElementById('link-promoToBreak');
@@ -123,7 +120,7 @@ function startTimer(timeDisplay){
             clearInterval(myInterval);
             const display = currentTimer.querySelector('.time');
             display.textContent = '00:00';
-            
+
             if (currentTimer.id === 'regularTimer') {
                 notifPromo.classList.remove('hidden');
                 notifPromo.classList.add('visible');
@@ -179,6 +176,36 @@ function resetTimer() {
         display.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
     }
 }
+
+const colorButtons = document.querySelectorAll('.color-btn');
+const bgColor = document.querySelector('.main-section');
+const title = document.querySelector('.main-title');
+const input1 = document.querySelector('.inpt1');
+const input2 = document.querySelector('.inpt2');
+const rootStyles = getComputedStyle(document.documentElement);
+const getColorVar = (varName) => rootStyles.getPropertyValue(varName).trim();
+const alarmSound = new Audio('assets/alarmSound.wav');
+alarmSound.preload = 'auto';
+
+colorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const color = button.dataset.color;
+
+        const lightColor = getColorVar(`--${color}-clr`);
+        const darkColor = getColorVar(`--dark-${color}-clr`);
+
+        bgColor.style.backgroundColor = lightColor;
+        title.style.color = darkColor;
+
+        input1.style.backgroundColor = lightColor;
+        input2.style.backgroundColor = lightColor;
+
+        document.documentElement.style.setProperty('--main-title', darkColor);
+
+        colorButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+    });
+});
 
 startBtn.addEventListener('click', () => {
     if (!currentTimer) return;
@@ -300,7 +327,7 @@ function initTimeInputs() {
 
     minutesInput.addEventListener('blur', function() {
         if (this.value === '' || this.value === '0') {
-            this.value = '00';
+            this.value = '01';
         }
         if (this.value.length === 1) {
             this.value = '0' + this.value;

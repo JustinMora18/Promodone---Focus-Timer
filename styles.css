@@ -112,8 +112,8 @@ html, body{
     gap: 7%;
 
     background-color: #00000011;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(20px);
     background-clip: padding-box;
     -webkit-background-clip: padding-box;
     border: solid 1px #51515140;
