@@ -376,6 +376,13 @@ function loadCurrentTimerValues() {
     secondsInput.value = seconds.toString().padStart(2, '0');
 }
 
+// const toggleBtn = document.getElementById('menu-toggle');
+// const mobileMenu = document.getElementById('mobile-menu');
+
+// toggleBtn.addEventListener('click', () => {
+// mobileMenu.classList.toggle('show');
+// });
+
 document.addEventListener('DOMContentLoaded', function() {
     initZIndexManager();
     initTimeInputs(); 

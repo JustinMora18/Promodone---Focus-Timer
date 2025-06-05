@@ -21,13 +21,22 @@
     --scnd-font: 'Bayon', sans-serif;
     --trd-font: "Basic", sans-serif;
 
-    --s-fs: 1rem;
-    --m-fs: 2rem;
-    --l-fs: 13rem;
-    --xl-fs: 20rem;
+    /* Responsive font sizes using clamp() */
+    --s-fs: clamp(0.875rem, 2vw, 1rem);
+    --m-fs: clamp(1.25rem, 3vw, 2rem);
+    --l-fs: clamp(4rem, 12vw, 13rem);
+    --xl-fs: clamp(6rem, 15vw, 20rem);
 
-    --logo1: 5rem;
-    --logo2: 9rem;
+    /* Responsive logo sizes */
+    --logo1: clamp(3rem, 8vw, 5rem);
+    --logo2: clamp(5rem, 12vw, 9rem);
+
+    /* Responsive spacing */
+    --border-width: clamp(10px, 2vw, 20px);
+    --panel-padding: clamp(20px, 5vw, 80px);
+    --gap-small: clamp(0.5rem, 2vw, 1rem);
+    --gap-medium: clamp(1rem, 4vw, 2rem);
+    --gap-large: clamp(2rem, 8vw, 4rem);
 }
 
 html, body{
@@ -51,8 +60,7 @@ html, body{
 
 .top-navigation{
     position: fixed;
-    width: 55%;
-    min-width: 700px;
+    width: clamp(700px, 55vw, 100%);
     height: 8%;
     top: 0;
     left: 50%;
@@ -85,20 +93,25 @@ html, body{
     cursor: pointer;
 }
 
-.main-title{
-    position: relative;
+.main-title {
+    position: absolute;
+    top: 26%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     text-align: center;
-    font-family: var( --frst-font);
-    font-size: var(--l-fs);
+    font-family: var(--frst-font);
+    font-size: clamp(4rem, 12vw, 13rem);
     color: var(--main-title);
-    letter-spacing: -15px;
-    margin-top: -12.5rem;
+    letter-spacing: min(-15px, 1vw); 
+    z-index: 0;
 }
 
 .blur-box{
-    width: 1180px;
-    height: 630px;
+    width: 63%;
+    max-width: 1180px;
+    height: 55%;
+    max-height: 590px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -35%);
@@ -109,11 +122,11 @@ html, body{
     justify-content: center;
     position: absolute;
     align-items: center;
-    gap: 7%;
+    gap: 4%;
 
     background-color: #00000011;
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     background-clip: padding-box;
     -webkit-background-clip: padding-box;
     border: solid 1px #51515140;
@@ -138,7 +151,6 @@ html, body{
 }
 
 .timer-nav-buttons a{
-    height: auto;
     text-decoration: none;
     color: var(--text-color);
     font-family: var(--scnd-font);
@@ -435,4 +447,155 @@ footer p{
 .notif-action a:hover{
     color: var(--main-bg);
     text-decoration:line-through;
+}
+
+.menu-toggle {
+    display: none;
+    background: var(--main-title);
+    color: white;
+    font-size: 2rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.mobile-menu {
+    display: none;
+    background-color: var(--main-bg);
+    padding: 1rem;
+    border-radius: 1.5rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-menu li {
+    margin: 1rem 0;
+}
+
+.mobile-menu a {
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+    .top-nav-item{
+        font-size: clamp(1rem, 2.5vw, 1.5rem);
+    }
+
+    .main-title {
+        top: 24%; 
+        letter-spacing: min(-10px, 1vw);
+    }
+
+    .blur-box {
+        height: 47%;
+        top: 46.5%;
+        transform: translate(-50%, -40%);
+        gap: 3.8%;
+        border-radius: 25px;
+    }
+
+    .timer-nav-buttons a {
+        font-size: clamp(1rem, 2.5vw, 1.5rem);
+    }
+
+    .timer h2 {
+        font-size: clamp(96px, 180px, 320px);
+    }
+
+    .control-btn .material-symbols-outlined {
+        font-size: clamp(2.5rem, 5.5vw, 3.5rem);
+    }
+    
+}
+
+@media (max-width: 992px) {
+    .top-nav-item{
+        font-size: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .main-title {
+        top: 24%;
+        border-radius: 20px;
+    }
+    
+    .timer-nav-buttons a {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .timer h2 {
+        font-size: clamp(96px, 160px, 320px);
+    }
+
+    .control-btn .material-symbols-outlined {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+    }
+}
+
+@media (max-width: 800px) {
+    .top-navigation {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+        margin: 1rem auto;
+    }
+
+    .mobile-menu {
+        display: none;
+        position: absolute;
+        top: 3.5rem;
+        right: 1rem;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 1rem;
+        z-index: 9;
+    }
+
+    .mobile-menu.active {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .blur-box {
+        width: 80vw;
+        max-width: 600px;
+        height: auto;
+        max-height: 500px;
+        padding: 2rem 1.5rem;
+        top: 42%;
+        transform: translate(-50%, -40%);
+        gap: 3%;
+        border-radius: 20px;
+    }
+    .timer-nav-buttons a {
+        font-size: clamp(0.9rem, 2vw, 1.3rem);
+    }
+    .timer h2 {
+        font-size: clamp(96px, 115px, 320px);
+    }
+    .control-btn .material-symbols-outlined {
+        font-size: clamp(48px, 61px, 80px);
+    }
+}
+
+@media (max-width: 576px) {
+    .blur-box {
+        width: 90vw;
+        max-width: 450px;
+        padding: 1.5rem 1rem;
+        top: 38%;
+        transform: translate(-50%, -38%);
+        gap: 2.5%;
+        border-radius: 16px;
+    }
 }
