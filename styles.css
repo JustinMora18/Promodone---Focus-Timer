@@ -68,6 +68,7 @@ html, body{
     background-color: var(--dark-grey);
     z-index: 100;
     border-radius: 0 0 30px 30px;
+    padding: 0 1rem;
 }
 
 .top-navigation ul{
@@ -451,22 +452,45 @@ footer p{
 
 .menu-toggle {
     display: none;
-    background: var(--main-title);
-    color: white;
-    font-size: 2rem;
+    position: absolute;
+    width: 6rem;
+    height: 2rem;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-grey);
+    color: var(--text-color);
     border: none;
+    border-radius: 1.5rem;
+    padding: 0;
+    font-size: 1.2rem;
+    z-index: 999;
     cursor: pointer;
-    border-radius: 1rem;
-    padding: 0.5rem 1rem;
+    transition: transform 0.3s ease;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+.menu-toggle .material-symbols-outlined{
+    line-height: 1.4;
 }
 
 .mobile-menu {
-    display: none;
-    background-color: var(--main-bg);
-    padding: 1rem;
+    position: absolute;
+    top: 4.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-grey);
     border-radius: 1.5rem;
-    margin-top: 1rem;
+    padding: 1rem 2rem;
+    width: 90%;
+    max-width: 350px;
     text-align: center;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 998;
 }
 
 .mobile-menu ul {
@@ -480,8 +504,13 @@ footer p{
 }
 
 .mobile-menu a {
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
+}
+
+.mobile-menu.show {
+    display: block;
+    opacity: 1;
 }
 
 @media (max-width: 1200px) {
@@ -491,7 +520,7 @@ footer p{
 
     .main-title {
         top: 24%; 
-        letter-spacing: min(-10px, 1vw);
+        letter-spacing: min(-13px, 1vw); 
     }
 
     .blur-box {
@@ -523,7 +552,7 @@ footer p{
 
     .main-title {
         top: 24%;
-        border-radius: 20px;
+        border-radius: 20px;        letter-spacing: min(-10px, 1vw); 
     }
     
     .timer-nav-buttons a {
@@ -540,6 +569,10 @@ footer p{
 }
 
 @media (max-width: 800px) {
+    .main-title {
+        letter-spacing: min(-7px, 1vw); 
+    }
+    
     .top-navigation {
         display: none;
     }
@@ -549,15 +582,18 @@ footer p{
         margin: 1rem auto;
     }
 
-    .mobile-menu {
-        display: none;
-        position: absolute;
-        top: 3.5rem;
-        right: 1rem;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        padding: 1rem;
-        z-index: 9;
+    .mobile-menu a {
+        display: block;
+        margin: 1rem 0;
+        font-family: var(--scnd-font);
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: var(--m-fs);
+    }
+
+    .mobile-menu a:hover {
+        text-decoration: line-through;
+        color: var(--nv-tx-hv);
     }
 
     .mobile-menu.active {
@@ -566,36 +602,103 @@ footer p{
 }
 
 @media (max-width: 768px) {
+    .main-section {
+        border-width: 16px;
+    }
+
+    .main-title {
+        letter-spacing: min(-7px, 1vw); 
+    }
+
     .blur-box {
         width: 80vw;
         max-width: 600px;
         height: auto;
         max-height: 500px;
         padding: 2rem 1.5rem;
-        top: 42%;
+        top: 38%;
         transform: translate(-50%, -40%);
         gap: 3%;
         border-radius: 20px;
     }
+
     .timer-nav-buttons a {
         font-size: clamp(0.9rem, 2vw, 1.3rem);
     }
+
     .timer h2 {
         font-size: clamp(96px, 115px, 320px);
     }
+
     .control-btn .material-symbols-outlined {
         font-size: clamp(48px, 61px, 80px);
     }
 }
 
 @media (max-width: 576px) {
+    .main-section {
+        border-width: 12px;
+    }
+
+    .main-title{
+        letter-spacing: min(-6px, 1vw);
+    }
+
     .blur-box {
-        width: 90vw;
         max-width: 450px;
         padding: 1.5rem 1rem;
         top: 38%;
         transform: translate(-50%, -38%);
         gap: 2.5%;
         border-radius: 16px;
+    }
+}
+
+@media (max-width: 400px) {
+    .main-section {
+        border-width: 8px;
+    }
+
+    .main-title {
+        font-size: clamp(2rem, 13vw, 4rem);
+        top: 30%;
+        letter-spacing: min(-2px, 1vw);
+    }
+
+    .blur-box {
+        width: 90vw;
+        max-width: 350px;
+        padding: 1rem;
+        top: 43.5%;
+        gap: 2%;
+        border-radius: 12px;
+    }
+
+    .timer h2 {
+        font-size: clamp(60px, 80px, 100px);
+    }
+
+    .control-btn .material-symbols-outlined {
+        font-size: clamp(40px, 48px, 60px);
+    }
+
+    .time-input .inpt1, .time-input .inpt2 {
+        width: 70px;
+        height: 70px;
+        font-size: var(--s-fs);
+    }
+
+    .notif-title {
+        font-size: 1.8rem;
+    }
+
+    .notif-action a {
+        font-size: 1.2rem;
+    }
+
+    .notification {
+        min-width: 280px;
+        height: auto;
+        padding: 1rem;
     }
 }
